@@ -59,7 +59,7 @@ export function Home() {
         <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 animate-fade-in space-y-1">
           <div>Powered by Gemini 2.0</div>
           <div>
-            Created by <a href="http://x.com/ammaar" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 dark:hover:text-gray-300 transition-colors">@ammaar</a>
+            Created by <a href="https://www.linkedin.com/in/siddh-jagani" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 dark:hover:text-gray-300 transition-colors">@Siddh</a>
           </div>
         </div>
       </div>

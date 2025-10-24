@@ -11,14 +11,15 @@ import { setupEnvironment } from "./env";
 const env = setupEnvironment();
 const genAI = new GoogleGenerativeAI(env.GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "google/gemma-3-27b-it",
+  model: "gemma-3-27b-it", // try without 'google/' — confirm with your model list
   generationConfig: {
     temperature: 0.7,
     topP: 1,
-    topK: 1,
-    maxOutputTokens: -1,
+    // maxOutputTokens: 1024, // set if you want a hard cap
+    // remove topK:1 unless you want deterministic single-token sampling
   },
 });
+
 
 // Store chat sessions in memory
 const chatSessions = new Map<string, ChatSession>();

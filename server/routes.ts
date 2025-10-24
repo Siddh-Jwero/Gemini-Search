@@ -20,7 +20,6 @@ const model = genAI.getGenerativeModel({
   },
 });
 
-
 // Store chat sessions in memory
 const chatSessions = new Map<string, ChatSession>();
 

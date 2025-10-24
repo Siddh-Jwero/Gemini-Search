@@ -11,7 +11,7 @@ import { setupEnvironment } from "./env";
 const env = setupEnvironment();
 const genAI = new GoogleGenerativeAI(env.GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "gemma-3-27b-it", // try without 'google/' — confirm with your model list
+  model: "gemini-2.5-flash-lite", // try without 'google/' — confirm with your model list
   generationConfig: {
     temperature: 0.7,
     topP: 1,

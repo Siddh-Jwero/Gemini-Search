@@ -11,12 +11,12 @@ import { setupEnvironment } from "./env";
 const env = setupEnvironment();
 const genAI = new GoogleGenerativeAI(env.GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-exp",
+  model: "google/gemma-3-27b-it",
   generationConfig: {
-    temperature: 0.9,
+    temperature: 0.7,
     topP: 1,
     topK: 1,
-    maxOutputTokens: 2048,
+    maxOutputTokens: -1,
   },
 });
 

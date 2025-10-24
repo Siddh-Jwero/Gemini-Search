@@ -134,6 +134,11 @@ export function Search() {
   // Use currentResults if available, otherwise fall back to data from useQuery
   const displayResults = currentResults || data;
 
+  // --- NEW: derive original vs follow-up results for rendering only (no logic mutated) ---
+  const originalResults = data;                 // the original search results from useQuery
+  const followUpResults = isFollowUp ? currentResults : null; // follow-up response stored in currentResults
+  // -------------------------------------------------------------------------------
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -176,21 +181,59 @@ export function Search() {
 
         <AnimatePresence mode="wait">
           <motion.div
-            key={searchQuery}
+            key={searchQuery + (isFollowUp ? '-followup' : '')}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
             className="flex flex-col items-stretch"
           >
-            <SearchResults
-              query={isFollowUp ? (followUpQuery || '') : searchQuery}
-              results={displayResults}
-              isLoading={isLoading || followUpMutation.isPending}
-              error={error || followUpMutation.error || undefined}
-              isFollowUp={isFollowUp}
-              originalQuery={originalQuery || ''}
-            />
+            {/* If not a follow-up, render exactly as before */}
+            {!isFollowUp && (
+              <SearchResults
+                query={searchQuery}
+                results={displayResults}
+                isLoading={isLoading || followUpMutation.isPending}
+                error={error || followUpMutation.error || undefined}
+                isFollowUp={isFollowUp}
+                originalQuery={originalQuery || ''}
+              />
+            )}
+
+            {/* If it's a follow-up, show ORIGINAL and FOLLOW-UP results stacked and independently scrollable */}
+            {isFollowUp && (
+              <div className="flex flex-col gap-6 w-full items-start">
+                {/* ORIGINAL results pane */}
+                <div className="w-full max-w-2xl">
+                  <div className="mb-2 text-sm text-muted-foreground">Original — {originalQuery || searchQuery}</div>
+                  <div className="rounded-md border bg-card p-2 max-h-[40vh] overflow-y-auto">
+                    <SearchResults
+                      query={originalQuery || searchQuery}
+                      results={originalResults}
+                      isLoading={isLoading}
+                      error={error || undefined}
+                      isFollowUp={false}
+                      originalQuery={originalQuery || ''}
+                    />
+                  </div>
+                </div>
+
+                {/* FOLLOW-UP results pane */}
+                <div className="w-full max-w-2xl">
+                  <div className="mb-2 text-sm text-muted-foreground">Follow-up — {followUpQuery || ''}</div>
+                  <div className="rounded-md border bg-card p-2 max-h-[40vh] overflow-y-auto">
+                    <SearchResults
+                      query={followUpQuery || ''}
+                      results={followUpResults}
+                      isLoading={followUpMutation.isPending}
+                      error={followUpMutation.error || undefined}
+                      isFollowUp={true}
+                      originalQuery={originalQuery || ''}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {displayResults && !isLoading && !followUpMutation.isPending && (
               <motion.div
